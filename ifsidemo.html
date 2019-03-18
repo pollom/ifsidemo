@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style type="text/css">
+   
+		* {
+		  box-sizing: border-box;
+		}
+
+	    body {
+	      color:#000000;
+	      background-color:#85a2ff !important;
+	      background-image:url('Background Image');
+	      background-repeat:no-repeat;
+	    }
+
+
+	    .todoList {
+	    	margin: 0;
+	    	padding: 0;
+  			position: relative;
+  			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	    }
+
+/*      
+	    .todoList li {
+	      background: lightgray;
+	      list-style-type: none;
+		  padding: 12px 8px 12px 40px;
+		  border-bottom: 1px solid #ddd;
+		  font: normal bold 18px Arial;
+		  width: 100%;    	
+	    }
+*/
+		.todoList li {
+		  cursor: pointer;
+		  position: relative;
+		  padding: 12px 8px 12px 40px;
+		  list-style-type: none;
+		  background: #eee;
+		  font-size: 18px;
+		  transition: 0.2s;
+		  font: normal normal 18px Arial;
+		  
+		  /* make the list items unselectable */
+		  -webkit-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
+
+		.todoList li:nth-child(odd) {
+		  background: #eeeeee;
+		}	
+
+	    .todoList li:hover {
+	    	color: black;
+	    	background-color: darkgray;
+	    	cursor: pointer;
+
+	    }
+
+	    
+
+    
+
+	    .btn {
+	    	color:#85a2ff;
+	    	background-color:#a2ff85; 
+	    	padding: 16px;
+	    	display: inline-block;
+	    	font: normal normal 18px Arial;
+		    margin-right: 10px;
+		    margin-left: 0px;
+	    	
+
+	    }
+
+	    a:hover {
+	    	color: black;
+	    	background-color: lightgray;
+	    }
+
+	    a {
+	    	text-decoration: none;
+	    }
+
+	    h1 {
+	    	color: #a2ff85;
+	    	font: normal bold 30px/30px Arial;
+	    	text-align: center;
+	    }
+
+
+
+	    .main {
+	    	padding: auto;
+	    	/*margin: 0% 0% 25% 25%;*/
+	    	width: 100%;
+	    	height: 100%;
+	    }
+
+	    .btnGroup {
+	    	padding: 5%;
+	    	margin-left: auto;
+  			margin-right: auto;
+	    	display: inline-block;
+	    }
+
+	    .taskItem {
+
+	    }
+
+	    .taskForm {
+	    	display: inline-block;
+	    	width: 100%;
+	    }
+
+		input {
+		  margin-right: 10px;
+		  margin-left: 0px;
+		  border: none;
+		  border-radius: 0;
+		  width: 25%;
+		  padding: 16px;
+		  float: left;
+		  font-size: 16px;
+		  display: inline-block;
+		}
+
+
+
+		label {
+		  margin-right: 10px;
+		  margin-left: 0px;
+		  border: none;
+		  border-radius: 0;
+		  width: 25%;
+		  padding: 0px;
+		  float: left;
+		  font-size: 16px;
+		  display: inline-block;
+		  font-family: Arial;
+		  font-weight: bold;
+		}	 			
+
+
+		span {
+			margin-right: 20px;
+			display: inline-block;
+		}
+
+
+
+		.close {
+		  position: absolute;
+		  right: 0;
+		  top: 0;
+		  padding: 12px 16px 12px 16px;
+		}
+
+		.close:hover {
+		  background-color: #f44336;
+		  color: white;
+		}	
+
+
+
+		.container {
+		  display: block;
+		  position: relative;
+		  padding-left: 10px;
+		  margin-bottom: 12px;
+		  cursor: pointer;
+		  font-size: 22px;
+		  -webkit-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		  background-color: gray;
+		}
+
+		/* Hide the browser's default checkbox */
+		.container input {
+		  position: absolute;
+		  opacity: 0;
+		  cursor: pointer;
+		  height: 0;
+		  width: 0;
+		}
+
+		/* Create a custom checkbox */
+		.checkmark {
+		  position: absolute;
+		  top: 0;
+		  left: 0;
+		  height: 25px;
+		  width: 25px;
+		  background-color: #ccc;
+		}
+
+		/* On mouse-over, add a grey background color */
+		.container:hover input ~ .checkmark {
+		  background-color: #ccc;
+		}
+
+		/* When the checkbox is checked, add a blue background */
+		.container input:checked ~ .checkmark {
+		  background-color: #a2ff85;
+		}
+
+		/* Create the checkmark/indicator (hidden when not checked) */
+		.checkmark:after {
+		  content: "";
+		  position: absolute;
+		  display: none;
+		}
+
+		/* Show the checkmark when checked */
+		.container input:checked ~ .checkmark:after {
+		  display: block;
+		}
+
+		/* Style the checkmark/indicator */
+		.container .checkmark:after {
+		  left: 9px;
+		  top: 5px;
+		  width: 5px;
+		  height: 10px;
+		  border: solid white;
+		  border-width: 0px 3px 3px 0;
+		  -webkit-transform: rotate(45deg);
+		  -ms-transform: rotate(45deg);
+		  transform: rotate(45deg);
+		}
+    
+    </style>
+    <script>
+    	var editState;
+    	$(document).ready(function() {
+
+    		var jsonAdd;
+    		var jsonUpdate;
+    		var jsonData;
+            var sel_elem;
+
+			$("#data").empty();
+    		$("#txtDescription").val("");
+    		$("#txtDueDate").val("");
+    		$("#hdnTaskID").val("");	
+
+    		//$("input:radio[name=optCompleted]")[0].checked = false;
+    		//$("input:radio[name=optCompleted]")[1].checked = false;    		
+    		
+
+    		$("#btnAdd").click( function(e) {
+                var fragment;
+    			//alert("Button Add");
+    			//e.preventDefault();
+    			//alert($("#txtDescription").val());
+    			if ( $("#txtDescription").val().length == 0 || $("#txtDueDate").val().length == 0 ) {
+    				alert("You must enter a description and a due date");
+    				return;
+    			}
+
+    			jsonData = '{"action":"createTask","task_description":"'+$("#txtDescription").val()+'","due_date":"'+$("#txtDueDate").val()+'", "completed":"0","apiKey":"1a1f1992a5e64de6f481af2f4da2b300"}'; 
+ 
+               
+                 
+          
+                
+    			//alert(jsonData);
+
+    			$.ajax({
+    				url: "https://www.fsi.illinois.edu/demo/data.cfm",
+    				data: jsonData,
+    				dataType: "json",
+    				type: "POST",
+    				contentType: "application/json",
+    				success: OnAddSuccess,
+    				error: OnAddError
+    			});  
+             
+		
+    			//alert(jsonData);
+    			editState = "ADD";
+    		});
+
+    		function OnAddSuccess(data) {
+                    var fragment;
+                    //alert("data.task_id = " + data.task_id);
+                
+				    fragment = "<li id='"+data.task_id+"'data='"+$("#txtDescription").val()+"|"+$("#txtDueDate").val()+"|0|"+data.task_id+"'><label class=container><input type=checkbox  taskid='"+data.task_id+"'><span class=checkmark></span></label><span id=desc>"+$("#txtDescription").val()+"</span><span id=duedate>"+$("#txtDueDate").val()+" (due date)</span><span class=close taskid='"+data.task_id+"'>\u00D7</span></li>";
+                    
+				    //alert(fragment);
+				    $(".todoList").append(fragment);                
+
+                    
+    		}
+
+    		function OnAddError(data) {
+    			$(".error").html("Error Adding Item");
+    		}  
+
+
+ 
+
+    		$("#btnUpdate").click( function(e) {
+
+ 
+    			jsonData = '{"action":"updateTask","task_description":"'+$("#txtDescription").val()+'", "due_date":"'+$("#txtDueDate").val()+'","completed":"'+$("#hdnCompleted").val()+'","task_id":"'+$("#hdnTaskID").val()+'","apiKey":"1a1f1992a5e64de6f481af2f4da2b300"}';
+                
+    			
+                //alert(jsonData);
+                $(sel_elem).find("span[id='desc']").text($("#txtDescription").val());
+                $(sel_elem).find("span[id='duedate']").text($("#txtDueDate").val() + " (due date)");
+    			
+    			$.ajax({
+    				url: "https://www.fsi.illinois.edu/demo/data.cfm",
+    				data: jsonData,
+    				dataType: "json",
+    				type: "POST",
+    				contentType: "application/json",
+    				success: OnSaveSuccess,
+    				error: OnSaveError
+    			});   
+    			 			
+    		});
+
+
+    		function OnSaveSuccess(data) {
+
+    		}
+
+    		function OnSaveError(data) {
+                $(".error").html("Error Adding Item");
+    		}    		
+
+
+            /* Refresh to-do list */
+    		$("#btnGet").click( function(e) {
+    			//alert("Button Get");
+    			e.preventDefault();
+				$("#data").empty();
+				$(".todoList").empty();
+    			var jsonData = '{"action":"getTasks","apiKey":"1a1f1992a5e64de6f481af2f4da2b300"}';
+
+    			$.ajax({
+    				url: "https://www.fsi.illinois.edu/demo/data.cfm",
+    				data: jsonData,
+    				dataType: "json",
+    				type: "POST",
+    				contentType: "application/json",
+    				success: OnGetSuccess,
+    				error: OnGetError
+    			});
+
+    		});  
+            
+            
+            
+	    	function OnGetSuccess(data) {
+	    		//alert("Success");
+				//var fragment="<ul>"
+          		var fragment;
+				$.each(data, function (index, val) {
+				                                            
+				    var description = val.task_description;
+				    var dueDate = val.due_date;
+				    var completed = val.completed;
+				    var taskID = val.task_id;
+
+				    
+                    if ( completed == 1 ) {
+     				    fragment = "<li id='"+taskID+"'data='"+description+"|"+dueDate+"|"+completed+"|"+taskID+"'><label class=container><input type=checkbox  taskid='"+taskID+"' checked><span class=checkmark></span></label><span id=desc style='text-decoration:line-through'>"+description+"</span><span id=duedate style='text-decoration:line-through'>"+dueDate+" (due date)</span><span class=close taskid='"+taskID+"'>\u00D7</span></li>";                       
+                    } else if ( completed == 0 ) {
+    				    fragment = "<li id='"+taskID+"'data='"+description+"|"+dueDate+"|"+completed+"|"+taskID+"'><label class=container><input type=checkbox  taskid='"+taskID+"'><span class=checkmark></span></label><span id=desc style='text-decoration:none'>"+description+"</span><span id=duedate style='text-decoration:none'>"+dueDate+" (due date)</span><span class=close taskid='"+taskID+"'>\u00D7</span></li>";                       
+                    }
+
+				    
+				    $(".todoList").append(fragment);
+				     	
+				    
+				});
+
+	    	}
+	    	    	
+	    	function OnGetError(data) {
+	    		//alert("Error");
+	    		//$(".listContainer").html("Error occurred");
+	    	}
+            
+            
+            
+
+
+    		/* Delete the TASK  OR  Update TASK to completed */
+			$( ".todoList" ).click(function( event ) {
+			  var target = $( event.target );
+			  if ( target.is( "li > .close" ) ) {
+			  	//var res = target.id.split("|");
+			  	var taskid = target.attr("taskid");
+			  	//alert(taskid);
+
+			  	var jsonData = '{"action":"deleteTask","task_id":"'+taskid+'","apiKey":"1a1f1992a5e64de6f481af2f4da2b300"}';
+
+			  	//alert(jsonData);
+
+    			$.ajax({
+    				url: "https://www.fsi.illinois.edu/demo/data.cfm",
+    				data: jsonData,
+    				dataType: "json",
+    				type: "POST",
+    				contentType: "application/json",
+    				success: OnDeleteSuccess,
+    				error: OnDeleteError
+    			});
+                  
+                
+                $(".todoList").find("li[id="+taskid+"]").remove();
+     			
+			  }
+
+                
+              /* Handle checkbox: if checked the item is completed */    
+			  if ( target.is( "li > .container > input[type='checkbox']" ) ) {
+			  	var taskid = target.attr("taskid");
+			  	//alert(taskid);
+
+                var completed;
+    			var taskData = $(event.target).parent().parent().attr("data").split("|");
+                
+                if ( taskData[2] == 0 ) {
+                    completed = 1;
+                    $(event.target).parent().parent().attr("data", taskData[0] + "|" + taskData[1] + "|" + completed + "|" + taskData[3]);
+                    //$("li > #desc").css("text-decoration", "line-through");
+                    $(event.target).parent().next().css("text-decoration", "line-through"); 
+                    $(event.target).parent().next().next().css("text-decoration", "line-through");
+                } else if ( taskData[2] == 1 ) {
+                    completed = 0;
+                    $(event.target).parent().parent().attr("data", taskData[0] + "|" + taskData[1] + "|" + completed + "|" + taskData[3]);     
+                    $(event.target).parent().next().css("text-decoration", "none"); 
+                    $(event.target).parent().next().next().css("text-decoration", "none");                    
+                }
+                  
+    			
+
+			  	
+			  	jsonData = '{"action":"updateTask","task_description":"'+taskData[0]+'","due_date":"'+taskData[1]+'","completed":"'+completed+'","task_id":"'+taskid+'","apiKey":"1a1f1992a5e64de6f481af2f4da2b300"}';
+
+			  	
+
+    			//alert(jsonData);
+
+    			$.ajax({
+    				url: "https://www.fsi.illinois.edu/demo/data.cfm",
+    				data: jsonData,
+    				dataType: "json",
+    				type: "POST",
+    				contentType: "application/json",
+    				success: OnUpdateSuccess,
+    				error: OnUpdateError
+    			});	
+
+
+   			
+    					  	
+			  }
+                
+                
+             if ( target.is( "li" ) ) {
+                sel_elem = event.target;
+                var taskData = $(event.target).attr("data").split("|");
+                //alert(taskData[0]); 
+                $("#txtDescription").val(taskData[0]);
+                $("#txtDueDate").val(taskData[1]);
+                $("#hdnCompleted").val(taskData[2]);
+                $("#hdnTaskID").val(taskData[3]);
+                
+              }
+                
+			});
+
+
+    		function OnDeleteSuccess(data) {
+
+    		}
+
+    		function OnDeleteError(data) {
+                $(".error").html("Error Deleting Item");
+    		}			
+
+
+    		function OnUpdateSuccess(data) {
+
+    		}
+
+    		function OnUpdateError(data) {
+                $(".error").html("Error Updating Item");
+    		}    		
+
+
+
+    	}); /* End document.ready */
+        
+
+
+
+
+    </script>
+  </head>
+  <body> 
+
+  	<h1>To-Do List</h1>
+  	<div class="main">
+  	
+
+	    <div class="taskForm">
+	    	<label for="txtDescription">Task Description:</label>
+	    	<label for="txtDueDate">Due Date:</label><br />
+	    	<input type="text" id="txtDescription" />
+	    	
+	    	<input type="text" id="txtDueDate" />
+	    	<!--
+	    	Completed:<input type="radio" name="optCompleted" value="1" /> Yes 
+	    			  <input type="radio" name="optCompleted" value="0" /> No
+	    	-->
+	    			  
+	    			  
+
+			<a href="#Add" class="btn" id="btnAdd" >Add Task</a>
+	    	<a href="#Update" class="btn" id="btnUpdate">Update Task</a>            
+			<a href="#Get" class="btn" id="btnGet">Refresh</a>
+			<!--<a href="#Delete" class="btn" id="btnDelete">Delete Task</a>-->
+			<input type="hidden" id="hdnTaskID" />
+            <input type="hidden" id="hdnCompleted" />
+			
+			<!--	<input type="button" class="btn" id="btnAdd" value="Add Task" /> -->
+
+	    </div>
+
+	    <br />
+	    <span class="error"></span>
+
+
+	    <ul class="todoList">
+  		    		
+	    </ul>
+	    
+
+
+
+
+    </div> <!-- End Main -->
+  </body>
+</html>
