@@ -235,6 +235,12 @@
 		  -ms-transform: rotate(45deg);
 		  transform: rotate(45deg);
 		}
+        
+        .error {
+            color: darkred;
+            font: normal bold 14px Arial;
+            padding: 10px 0px 10px 0px;
+        }
     
     </style>
     <script>
@@ -300,8 +306,8 @@
                     
     		}
 
-    		function OnAddError(data) {
-    			$(".error").html("Error Adding Item");
+    		function OnAddError( jqxhr, txtstatus, errorThrown ) {
+    			$(".error").html( "OnAddError: " + txtstatus + " " + errorThrown );
     		}  
 
 
@@ -334,8 +340,8 @@
 
     		}
 
-    		function OnSaveError(data) {
-                $(".error").html("Error Adding Item");
+    		function OnSaveError( jqxhr, txtstatus, errorThrown ) {
+   			$(".error").html( "OnSaveError: " + txtstatus + " " + errorThrown );
     		}    		
 
 
@@ -374,9 +380,9 @@
 
 				    
                     if ( completed == 1 ) {
-     				    fragment = "<li id='"+taskID+"'data='"+description+"|"+dueDate+"|"+completed+"|"+taskID+"'><label class=container><input type=checkbox  taskid='"+taskID+"' checked><span class=checkmark></span></label><span id=desc style='text-decoration:line-through'>"+description+"</span><span id=duedate style='text-decoration:line-through'>"+dueDate+" (due date)</span><span class=close taskid='"+taskID+"'>\u00D7</span></li>";                       
+     				    fragment = "<li id='"+taskID+"'data='"+description+"|"+dueDate+"|"+completed+"|"+taskID+"'><label class=container><input type=checkbox  taskid='"+taskID+"' checked><span class=checkmark></span></label><span class=row id=desc style='text-decoration:line-through'>"+description+"</span><span class=row id=duedate style='text-decoration:line-through'>"+dueDate+" (due date)</span><span class=close taskid='"+taskID+"'>\u00D7</span></li>";                       
                     } else if ( completed == 0 ) {
-    				    fragment = "<li id='"+taskID+"'data='"+description+"|"+dueDate+"|"+completed+"|"+taskID+"'><label class=container><input type=checkbox  taskid='"+taskID+"'><span class=checkmark></span></label><span id=desc style='text-decoration:none'>"+description+"</span><span id=duedate style='text-decoration:none'>"+dueDate+" (due date)</span><span class=close taskid='"+taskID+"'>\u00D7</span></li>";                       
+    				    fragment = "<li id='"+taskID+"'data='"+description+"|"+dueDate+"|"+completed+"|"+taskID+"'><label class=container><input type=checkbox  taskid='"+taskID+"'><span class=checkmark></span></label><span class=row id=desc style='text-decoration:none'>"+description+"</span><span class=row id=duedate style='text-decoration:none'>"+dueDate+" (due date)</span><span class=close taskid='"+taskID+"'>\u00D7</span></li>";                       
                     }
 
 				    
@@ -387,9 +393,9 @@
 
 	    	}
 	    	    	
-	    	function OnGetError(data) {
-	    		//alert("Error");
-	    		//$(".listContainer").html("Error occurred");
+	    	function OnGetError( jqxhr, txtstatus, errorThrown ) {
+	    		//$(".listContainer").html("OnGetError: Error occurred retrieving tasks");
+   			      $(".error").html( "OnGetError: " + txtstatus + " " + errorThrown );                
 	    	}
             
             
@@ -407,6 +413,7 @@
 			  	var jsonData = '{"action":"deleteTask","task_id":"'+taskid+'","apiKey":"1a1f1992a5e64de6f481af2f4da2b300"}';
 
 			  	//alert(jsonData);
+                  
 
     			$.ajax({
     				url: "https://www.fsi.illinois.edu/demo/data.cfm",
@@ -417,7 +424,7 @@
     				success: OnDeleteSuccess,
     				error: OnDeleteError
     			});
-                  
+               
                 
                 $(".todoList").find("li[id="+taskid+"]").remove();
      			
@@ -471,6 +478,7 @@
                 
                 
              if ( target.is( "li" ) ) {
+                
                 sel_elem = event.target;
                 var taskData = $(event.target).attr("data").split("|");
                 //alert(taskData[0]); 
@@ -480,6 +488,16 @@
                 $("#hdnTaskID").val(taskData[3]);
                 
               }
+                                   
+              if ( target.is( "li > .row") ) {
+                sel_elem = $(event.target).parent();
+                var taskData = $(event.target).parent().attr("data").split("|");
+                
+                $("#txtDescription").val(taskData[0]);
+                $("#txtDueDate").val(taskData[1]);
+                $("#hdnCompleted").val(taskData[2]);
+                $("#hdnTaskID").val(taskData[3]);                
+              }
                 
 			});
 
@@ -488,8 +506,8 @@
 
     		}
 
-    		function OnDeleteError(data) {
-                $(".error").html("Error Deleting Item");
+    		function OnDeleteError(jqxhr, txtstatus, errorThrown) {
+                $(".error").html("OnDeleteError: " + txtstatus + " " + errorThrown);
     		}			
 
 
@@ -497,8 +515,8 @@
 
     		}
 
-    		function OnUpdateError(data) {
-                $(".error").html("Error Updating Item");
+    		function OnUpdateError( jqxhr, txtstatus, errorThrown ) {
+                $(".error").html("OnUpdateError: " + txtstatus + " " + errorThrown);
     		}    		
 
 
@@ -543,6 +561,7 @@
 
 	    <br />
 	    <span class="error"></span>
+        <br />
 
 
 	    <ul class="todoList">
